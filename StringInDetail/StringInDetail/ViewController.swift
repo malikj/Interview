@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         uniqueCharacter()
         
         let str1 = "dogo"
+        
         let str2 = "godO"
         if(isPermutation(str1, str2)) {
             print("permutation yes")
@@ -59,6 +60,15 @@ class ViewController: UIViewController {
         stingIsSubstringOfAnother()
         
         let stringOne : [Character] = ["g","k","s","r","e","k"]
+        
+        var stringThree: [Character] = Array(repeating: "_", count: stringOne.count)
+
+        
+        for (i,val) in stringOne.enumerated() {
+            stringThree[i] = stringOne[stringOne.count-i-1]
+        }
+        
+        print(stringThree)
         
         let stringTwo : [Character] = ["g","e","e","k","s","f","o","r","g","e","e","k","s"]
 
