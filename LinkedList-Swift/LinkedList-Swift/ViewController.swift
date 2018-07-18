@@ -9,30 +9,9 @@
 import UIKit
 
 
-
-class Dog: Hashable {
-    
-    var hashValue: Int {
-        return uid.hashValue
-    }
-    static func ==(lhs: Dog, rhs: Dog) -> Bool {
-        return lhs.uid == rhs.uid
-    }
-    
-    var uid: Int
-    var name: String
-    var age: Int
-    init(uid: Int, name: String, age: Int) {
-        self.uid = uid
-        self.name = name
-        self.age = age
-    }
-}
-
 class Node<T:Equatable> {
     var value : T? = nil
     var next : Node? = nil
-    var insst : Int? = nil
 }
 
 class LinkedList<T: Equatable> {
@@ -150,8 +129,42 @@ class LinkedList<T: Equatable> {
         }
     }
     
-    func removeDuplicates(){
+    func removeDups<T: Hashable>(_ list: LinkedList<T>) {
+        var node = list.head
+        var previous : Node<T>? = nil
+        var founds: Set<T> = []
+        while node != nil {
+            let val = node!.value
+            if founds.contains(val!) {
+                previous?.next = node?.next
+            } else {
+                founds.insert(val!)
+                previous = node
+            }
+            node = node?.next
+        }
+    }
+    
+    /// Complexity: O(n^2) time and O(1) space
+
+    public func removeDups2<T>(_ list: LinkedList<T>) {
+        var node = list.head
         
+        while node != nil {
+            var runner = node?.next
+            
+            var previous = node
+            while runner != nil {
+                if runner?.value == node!.value {
+                    previous?.next = runner?.next
+                } else {
+                    previous = runner
+                }
+                runner = runner?.next
+            }
+            
+            node = node?.next
+        }
     }
     
     func deleteMid () {
@@ -234,41 +247,14 @@ class LinkedList<T: Equatable> {
         head.next?.next?.next = newNode(value: 4)
         head.next?.next?.next?.next = newNode(value: 10)
         head.next?.next?.next?.next?.next = head.next?.next
-        
-//        50 20 15 4 10
-
-
     }
-    
-//    func detectLoop () -> Bool {
-//        var slowPointer = self.head
-//        var fastPointer = self.head
-//        while true {
-//            if fastPointer?.next != nil && fastPointer?.next != nil{
-//                slowPointer = slowPointer?.next
-//                fastPointer = fastPointer?.next?.next
-////            }
-////            else {
-////                return false
-////            }
-//
-////            if(slowPointer == nil || fastPointer == nil) // if either hits null..no loop
-////            {
-////                return false
-////            }
-////            if slowPointer == fastPointer {
-////                return true
-////            }
-//        }
-//    }
-////        return false
-//}
+
+}
 
     
     func removeLoop () {
         
     }
-}
 
 class ViewController: UIViewController {
 
@@ -278,10 +264,20 @@ class ViewController: UIViewController {
         let myList = LinkedList<Int>()
         myList.insert(value: 100)
         myList.insert(value: 200)
+        myList.insert(value: 100)
+        myList.insert(value: 300)
         myList.insert(value: 300)
         myList.insert(value: 400)
         myList.insert(value: 500)
         myList.insert(value: 600)
+        print("--before duplicate removal ")
+
+        myList.printAllKeys()
+
+        myList.removeDups(myList)
+        print("--after duplicate removal ")
+        myList.printAllKeys()
+
         myList.printMid()
         myList.deleteMid()
         myList.printNthFromLast(indexVal: 1)
@@ -301,20 +297,8 @@ class ViewController: UIViewController {
         
     
         StringList.printAllKeys()
-//
         StringList.linkedListPolindrome()
-        
-        let dog1 = Dog(uid: 1, name: "Scrappy", age: 4)
-        let dog2 = Dog(uid: 2, name: "Sparky", age: 3)
-        let dogArray: [Dog: String] = [
-            dog1: "Woff Woff",
-            dog2: "Wooooooof!"
-        ]
-        let dogs: Set<Dog> = [dog1, dog2]
-        
-        if dog1 == dog2 {
-            
-        }
+       
         
     }
 
